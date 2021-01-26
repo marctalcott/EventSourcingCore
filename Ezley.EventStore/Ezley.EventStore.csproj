@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ezley.EventSourcing.Shared\Ezley.EventSourcing.Shared.csproj" />
+
       <ProjectReference Include="..\Ezley.Shared\Ezley.Shared.csproj" />
     </ItemGroup>
 
