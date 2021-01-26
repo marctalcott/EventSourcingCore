@@ -9,13 +9,13 @@ namespace Ezley.API.Commands.Infrastructure
     {
         public static IServiceCollection AddMediatorHandlers(this IServiceCollection services, Assembly assembly)
         {
-           
+
             services
                 // ServiceSubscriber
                 .AddCommand<RegisterServiceSubscriber, RegisterServiceSubscriberHandler>()
                 // Tenant
                 .AddCommand<RegisterTenant, RegisterTenantHandler>();
-          
+              
             return services;
         }
         private static IServiceCollection AddCommand<TRequest, THandler>(this IServiceCollection services)

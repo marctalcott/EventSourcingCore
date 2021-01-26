@@ -1,11 +1,7 @@
 using System.Reflection;
-using AutoMapper;
-using Ezley.API.Commands.Infrastructure;
-using Ezley.Domain.CRM.Repositories;
+using ES.API.Requests.Infrastructure;
 using Ezley.Events;
 using Ezley.EventSourcing;
-using Ezley.ProjectionStore;
-using Ezley.SnapshotStore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,8 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Ezley.ProjectionStore;
+using Ezley.SnapshotStore;
 
-namespace Ezley.API.Commands
+namespace ES.API.Requests
 {
     public class Startup
     {
@@ -30,9 +29,6 @@ namespace Ezley.API.Commands
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
-            services.AddAutoMapper(typeof(Startup));
-            
             SetupAuthentication(services);
             SetupCors(services);
             SetupSwagger(services);
@@ -59,19 +55,20 @@ namespace Ezley.API.Commands
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseExceptionHandler("/error"); // Add this
+
             app.UseHttpsRedirection();
             
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-            
+
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
             });
-
+            
             app.UseRouting();
             
             // useCors must come after UseRouting
@@ -80,8 +77,7 @@ namespace Ezley.API.Commands
             // 2. Enable authentication middleware
             app.UseAuthentication();
             app.UseAuthorization();
-            
-           
+
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
@@ -123,8 +119,18 @@ namespace Ezley.API.Commands
 
         private void SetupSwagger(IServiceCollection services)
         {
-            services.AddSwaggerGen();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Ezley API",
+                        Version = "v1"
+                    });
+            });
         }
+        
         private void SetupDI(IServiceCollection services)
         {
             string endpointUri = Configuration["Azure:EndPointUri"]; 
@@ -133,18 +139,19 @@ namespace Ezley.API.Commands
             string eventContainer = Configuration["Azure:EventContainer"];
             string viewContainer = Configuration["Azure:ViewContainer"];
             string snapshotContainer = Configuration["Azure:SnapshotContainer"];
+            
             // Setup DI
-            services.AddTransient<ICrmRepository, CrmRepository>();
-            services.AddTransient<IEventStore, CosmosDBEventStore>(serviceProvider =>
+            services.AddTransient<ISnapshotStore, CosmosSnapshotStore>(Tenant =>
+                new CosmosSnapshotStore(endpointUri, authKey, database,snapshotContainer));
+            
+            services.AddTransient<IEventStore, CosmosDBEventStore>(Tenant =>
                 new CosmosDBEventStore(
                     new EventTypeResolver(), endpointUri, authKey, database, eventContainer)
             );
-            services.AddTransient<ISnapshotStore, CosmosSnapshotStore>(serviceProvider =>
-                new CosmosSnapshotStore(endpointUri, authKey, database,snapshotContainer));
 
-            services.AddTransient<IViewRepository, CosmosDBViewRepository>(serviceProvider =>
+            services.AddTransient<IViewRepository, CosmosDBViewRepository>(Tenant =>
                 new CosmosDBViewRepository(endpointUri, authKey, database, viewContainer));
-
+             
         }
     }
 }
