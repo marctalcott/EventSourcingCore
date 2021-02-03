@@ -12,13 +12,6 @@ namespace Ezley.Domain.CRM.Repositories
         Task<Tenant> LoadTenant(Guid id);
         Task<bool> SaveTenant(EventUserInfo eventUserInfo, Tenant tenant, TenantSnapshot snapshot = null);
 
-        Task<ServiceSubscriber> LoadServiceSubscriber(Guid id);
-
-        Task<bool> SaveServiceSubscriber(
-            EventUserInfo eventUserInfo,
-            ServiceSubscriber aggregate,
-            ServiceSubscriberSnapshot snapshot = null);
-        
         Task<User> LoadUser(Guid id);
         Task<bool> SaveUser(EventUserInfo eventUserInfo, User user);
         
@@ -85,66 +78,6 @@ namespace Ezley.Domain.CRM.Repositories
         {
 
             var streamId = $"Tenant:{snapshot.Id.ToString()}";
-            await _snapshotStore
-                .SaveSnapshotAsync(streamId , snapshot.Version, snapshot);
-            return true;
-        }
-        #endregion
-        
-        #region ServiceSubscriber
-        public async Task<ServiceSubscriber> LoadServiceSubscriber(Guid id)
-        {
-            // You could add logic here to make sure you are only getting items you should
-            // for instance if you restrict access by tenantId, take in a TenantId parameter and
-            // only return if the tenantId matches.
-            var snapshotStreamId =  $"ServiceSubscriber:{id.ToString()}";
-            var snapshot = await _snapshotStore.LoadSnapshotAsync(snapshotStreamId);
-           
-           if (snapshot != null)
-           {
-               var streamTail = await _eventStore.LoadStreamAsync(id.ToString(), snapshot.Version + 1);
-
-               var serviceSubscriberSnapshot = snapshot.SnapshotData.ToObject<ServiceSubscriberSnapshot>();
-               return new ServiceSubscriber(
-                   serviceSubscriberSnapshot,
-                   streamTail.Events);
-           }
-           else
-           {
-               var stream = await _eventStore.LoadStreamAsyncOrThrowNotFound(id.ToString());
-               return new ServiceSubscriber(stream.Events);
-           }
-        }
-        
-        public async Task<bool> SaveServiceSubscriber(EventUserInfo eventUserInfo,
-            ServiceSubscriber aggregate,
-            ServiceSubscriberSnapshot snapshot = null)
-        {
-            if (aggregate.Changes.Any())
-            {
-                var streamId = aggregate.Id.ToString();
-                
-                // save all events
-                bool savedEvents = await _eventStore.AppendToStreamAsync(
-                    eventUserInfo,
-                    streamId,
-                    aggregate.Version,
-                    aggregate.Changes);
-                
-                // save snapshot
-                if (savedEvents && snapshot != null)
-                {
-                    await SaveServiceSubscriberSnapshot(snapshot);
-                }
-                return savedEvents;
-
-            }
-            return true;
-        }
-        
-        private async Task<bool> SaveServiceSubscriberSnapshot(ServiceSubscriberSnapshot snapshot)
-        {
-            var streamId = $"ServiceSubscriber:{snapshot.Id.ToString()}";
             await _snapshotStore
                 .SaveSnapshotAsync(streamId , snapshot.Version, snapshot);
             return true;

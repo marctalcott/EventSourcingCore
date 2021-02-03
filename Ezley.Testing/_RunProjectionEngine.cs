@@ -27,10 +27,7 @@ namespace Ezley.Testing
             
             projectionEngine.RegisterProjection(new UserProjection());
             projectionEngine.RegisterProjection(new TenantProjection());
-            projectionEngine.RegisterProjection(new ServiceSubscriberProjection());
-            projectionEngine.RegisterProjection(new ActiveServiceSubscribersProjection());
-            projectionEngine.RegisterProjection(new InactiveServiceSubscribersProjection());
-            
+
             await projectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
         }
