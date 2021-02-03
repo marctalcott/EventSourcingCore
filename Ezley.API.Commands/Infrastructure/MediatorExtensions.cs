@@ -11,8 +11,7 @@ namespace Ezley.API.Commands.Infrastructure
         {
 
             services
-                // ServiceSubscriber
-                .AddCommand<RegisterServiceSubscriber, RegisterServiceSubscriberHandler>()
+           
                 // Tenant
                 .AddCommand<RegisterTenant, RegisterTenantHandler>();
               
