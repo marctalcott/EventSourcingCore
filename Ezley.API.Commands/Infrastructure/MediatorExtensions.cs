@@ -1,5 +1,5 @@
 using System.Reflection;
-using Ezley.CQRS.Commands;
+using Ezley.Commands;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +13,7 @@ namespace Ezley.API.Commands.Infrastructure
             services
            
                 // Tenant
-                .AddCommand<RegisterTenant, RegisterTenantHandler>();
+                .AddCommand<PlaceOrder, PlaceOrderHandler>();
               
             return services;
         }

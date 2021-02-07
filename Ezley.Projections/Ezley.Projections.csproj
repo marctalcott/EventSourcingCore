@@ -16,7 +16,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Enums" />
+      <Compile Remove="Enums\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Enums\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Enums\**" />
     </ItemGroup>
 
 </Project>

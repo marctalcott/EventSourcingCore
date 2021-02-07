@@ -25,9 +25,8 @@ namespace Ezley.Testing
                 _testConfig.EndpointUri, _testConfig.AuthKey, _testConfig.Database,
                 _testConfig.EventContainer, _testConfig.LeasesContainer);
             
-            projectionEngine.RegisterProjection(new UserProjection());
-            projectionEngine.RegisterProjection(new TenantProjection());
-
+            projectionEngine.RegisterProjection(new OrderProjection());
+            
             await projectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
         }
