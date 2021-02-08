@@ -1,5 +1,6 @@
 /EventSourcing.sln
 appsettings.Local.json
+*TestConfig2.cs
 *.swp
 *.*~
 project.lock.json
