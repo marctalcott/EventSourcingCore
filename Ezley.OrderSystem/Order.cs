@@ -27,11 +27,11 @@ namespace Ezley.OrderSystem
             Apply(new OrderItemAdded(this.Id, item));
            
         }
-        public void RemoveItem(OrderItem item)
+        public void RemoveItem(string name)
         {
-            if (Items.Any(x => x.Name == item.Name))
+            if (Items.Any(x => x.Name == name))
             {
-                Apply(new OrderItemRemoved(this.Id, item));
+                Apply(new OrderItemRemoved(this.Id, name));
             }
         }
         // Event handlers
@@ -59,7 +59,7 @@ namespace Ezley.OrderSystem
         {
             // build new list
             var items = new List<OrderItem>();
-            items.AddRange(Items.Where(x => x.Name != OrderName));
+            items.AddRange(Items.Where(x => x.Name != @event.Name));
             // set to list without item
             Items = items;
         }

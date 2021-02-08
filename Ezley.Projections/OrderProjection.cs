@@ -43,7 +43,7 @@ namespace Ezley.Projections
         {
             // build new list
             var items = new List<OrderItem>();
-            items.AddRange(view.Items.Where(x => x.Name != e.Item.Name));
+            items.AddRange(view.Items.Where(x => x.Name != e.Name));
             // set to list without item
             view.Items = items;
         }

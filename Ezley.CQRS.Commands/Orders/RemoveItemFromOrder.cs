@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ezley.EventStore;
-using Ezley.OrderSystem;
 using Ezley.OrderSystem.Repositories;
-using Ezley.ValueObjects;
 using MediatR;
 
 namespace Ezley.Commands
@@ -14,13 +11,13 @@ namespace Ezley.Commands
     {
         public EventUserInfo EventUserInfo { get; }
         public Guid Id { get; }
-        public OrderItem Item { get; }
+        public string Name{ get; }
 
-        public RemoveItemFromOrder(EventUserInfo eventUserInfo, Guid id, OrderItem item)
+        public RemoveItemFromOrder(EventUserInfo eventUserInfo, Guid id, string name)
         {
             EventUserInfo = eventUserInfo;
             Id = id;
-            Item = item;
+            Name = name;
         }
     }
     
@@ -41,7 +38,7 @@ namespace Ezley.Commands
                 throw new ApplicationException("User must be defined.");
 
             var order = await _repository.LoadOrder(command.Id); 
-            order.RemoveItem(command.Item);
+            order.RemoveItem(command.Name);
             var saved = await _repository.SaveOrder(command.EventUserInfo, order);
            
             if (!saved)

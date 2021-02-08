@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Ezley.EventSourcing;
-using Ezley.ValueObjects;
 
 namespace Ezley.Events
 {
@@ -10,13 +8,13 @@ namespace Ezley.Events
     {
         public Guid Id { get; }
 
-        public OrderItem Item { get; }
+        public string Name { get; }
         
 
-        public OrderItemRemoved(Guid id,  OrderItem item)
+        public OrderItemRemoved(Guid id,  string name)
         {
             Id = id;
-            Item = item;
+            Name = name;
         }
 
     }
