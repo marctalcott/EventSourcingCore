@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Ezley.Events.Orders;
+using Ezley.Events;
 using Ezley.ProjectionStore;
 using Ezley.ValueObjects;
 

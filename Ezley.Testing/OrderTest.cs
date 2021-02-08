@@ -40,25 +40,38 @@ namespace Ezley.Testing
             var order = new Order(id, orderName, items);
             var repo = GetOrderSystemRepository();
             var saved = await repo.SaveOrder(userInfo, order);
-           
+            var order2 = await repo.LoadOrder(id);
+            Assert.Equal(id, order2.Id);
+            Assert.Equal(orderName, order2.OrderName);
+            Assert.Equal(items, order2.Items);
+
         }
         
         private OrderSystemRepository GetOrderSystemRepository()
-        { 
+        {
             var eventTypeResolver = new EventTypeResolver();
-            // var eventStore = new CosmosDBEventStore(
-            //     eventTypeResolver,
-            //     _testConfig.EndpointUri, 
-            //     _testConfig.AuthKey, _testConfig.Database, _testConfig.EventContainer);
-            var eventStore = new InMemoryEventStore(
-                 eventTypeResolver,
-                 new Dictionary<string, List<string>>());
-            var snapshotStore = new CosmosSnapshotStore(_testConfig.EndpointUri,
-                _testConfig.AuthKey,
-                _testConfig.Database, _testConfig.SnapshotContainer);
-            return new OrderSystemRepository(eventStore, snapshotStore);
+            if (_testConfig.UseInMemoryEventStore)
+            {
+                var eventStore = new InMemoryEventStore(
+                    eventTypeResolver,
+                    new Dictionary<string, List<string>>());
+                return new OrderSystemRepository(eventStore, null);
+            }
+            else
+            {
+                var eventStore = new CosmosDBEventStore(
+                    eventTypeResolver,
+                    _testConfig.EndpointUri,
+                    _testConfig.AuthKey, _testConfig.Database, _testConfig.EventContainer);
+
+                var snapshotStore = new CosmosSnapshotStore(_testConfig.EndpointUri,
+                    _testConfig.AuthKey,
+                    _testConfig.Database, _testConfig.SnapshotContainer);
+                return new OrderSystemRepository(eventStore, snapshotStore);
+
+            }
         }
-        
+       
         private CosmosDBViewRepository GetViewRepository()
         {
             return new CosmosDBViewRepository(_testConfig.EndpointUri, _testConfig.AuthKey,

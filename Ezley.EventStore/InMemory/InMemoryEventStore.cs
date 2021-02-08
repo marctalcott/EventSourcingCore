@@ -152,7 +152,7 @@ namespace Ezley.EventSourcing
             var items = events.Select(e => new EventWrapper
             {
                // Id = $"{streamId}:{++expectedVersion}:{e.GetType().Name}",
-               Id = $"{streamId}:{++expectedVersion}:{e.GetType().Name}",
+               Id = $"{streamId}:{++expectedVersion}", //:{e.GetType().Name}",
                 StreamInfo = new StreamInfo
                 {
                     Id = streamId,

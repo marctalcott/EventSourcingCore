@@ -11,8 +11,6 @@ namespace Ezley.API.Commands.Infrastructure
         {
 
             services
-           
-                // Tenant
                 .AddCommand<PlaceOrder, PlaceOrderHandler>();
               
             return services;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Ezley.EventSourcing;
 using Ezley.ValueObjects;
 
-namespace Ezley.Events.Orders
+namespace Ezley.Events
 {
    
     public class OrderPlaced: EventBase

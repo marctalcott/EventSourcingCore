@@ -22,9 +22,17 @@ namespace Ezley.EventSourcing
         public JObject UserInfo { get; set; }
 
         public IEvent GetEvent(IEventTypeResolver eventTypeResolver)
-        { 
-            Type eventType = eventTypeResolver.GetEventType(EventType);
-            return (IEvent)EventData.ToObject(eventType);
+        {
+            try
+            {
+                Type eventType = eventTypeResolver.GetEventType(EventType);
+                return (IEvent) EventData.ToObject(eventType);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to convert to an Event. Make sure the event " +
+                                    "class is in the correct namespace.");
+            }
         }
     }
 }

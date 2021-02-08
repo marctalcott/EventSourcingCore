@@ -29,23 +29,23 @@ namespace Ezley.OrderSystem.Repositories
             // You could add logic here to make sure you are only getting items you should
             // for instance if you restrict access by tenantId, take in a TenantId parameter and
             // only return if the tenantId matches.
-            var snapshotStreamId =  $"Order:{id}";
-            var snapshot = await _snapshotStore.LoadSnapshotAsync(snapshotStreamId);
-           
-           if (snapshot != null)
-           {
-               var streamTail = await _eventStore.LoadStreamAsync(id.ToString(), snapshot.Version + 1);
+            if (_snapshotStore != null)
+            {
+                var snapshotStreamId =  $"Order:{id}";
+                var snapshot = await _snapshotStore.LoadSnapshotAsync(snapshotStreamId);
+                if (snapshot != null)
+                {
+                    var streamTail = await _eventStore.LoadStreamAsync(id.ToString(), snapshot.Version + 1);
 
-               var orderSnapshot = snapshot.SnapshotData.ToObject<OrderSnapshot>();
-               return new Order(
-                   orderSnapshot,
-                   streamTail.Events);
-           }
-           else
-           {
-               var stream = await _eventStore.LoadStreamAsyncOrThrowNotFound(id.ToString());
-               return new Order(stream.Events);
-           }
+                    var orderSnapshot = snapshot.SnapshotData.ToObject<OrderSnapshot>();
+                    return new Order(
+                        orderSnapshot,
+                        streamTail.Events);
+                }
+            }
+            
+           var stream = await _eventStore.LoadStreamAsyncOrThrowNotFound(id.ToString());
+           return new Order(stream.Events);
         }
         
         public async Task<bool> SaveOrder(EventUserInfo eventUserInfo, Order aggregate, OrderSnapshot snapshot = null)
@@ -60,7 +60,7 @@ namespace Ezley.OrderSystem.Repositories
                     aggregate.Changes);
                 
                 // save snapshot
-                if (savedEvents && snapshot != null)
+                if (savedEvents && snapshot != null && _snapshotStore != null)
                 {
                     await SaveOrderSnapshot(snapshot);
                 }

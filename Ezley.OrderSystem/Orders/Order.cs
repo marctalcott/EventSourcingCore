@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using ES.Domain;
 using Ezley.Events;
-using Ezley.Events.Orders;
 using Ezley.EventSourcing;
 using Ezley.ValueObjects;
 
@@ -10,9 +9,9 @@ namespace Ezley.OrderSystem
 {
     public class Order: AggregateBase
     {
-        public Guid Id { get; }
-        public string OrderName { get; }
-        public List< OrderItem> Items { get; }
+        public Guid Id { get; private set; }
+        public string OrderName { get; private set;}
+        public List< OrderItem> Items { get; private set;}
         public Order(IEnumerable<IEvent> events): base(events)
         {
         }
@@ -26,9 +25,14 @@ namespace Ezley.OrderSystem
         // Event handlers
         protected override void Mutate(IEvent @event)
         {
-            ((dynamic) this).When((dynamic) @event);
+            ((dynamic) this).MutateWhen((dynamic) @event);
         }
-         
+        protected void MutateWhen(OrderPlaced @event)
+        {
+            Id = @event.Id;
+            OrderName = @event.OrderName;
+            Items = @event.Items;
+        }
         
         #region SnapshotFunctionality
         public OrderSnapshot GetSnapshot()
