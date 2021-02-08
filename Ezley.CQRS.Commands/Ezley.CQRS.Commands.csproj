@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ezley.Domain.CRM\Ezley.Domain.CRM.csproj" />
+      <ProjectReference Include="..\Ezley.OrderSystem\Ezley.OrderSystem.csproj" />
     </ItemGroup>
 
 </Project>

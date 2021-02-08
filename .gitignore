@@ -1,5 +1,6 @@
 /EventSourcing.sln
 appsettings.Local.json
+*TestConfig2.cs
 *.swp
 *.*~
 project.lock.json
@@ -37,3 +38,4 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+# /Ezley.API.Commands/Ezley.API.Commands.csproj
