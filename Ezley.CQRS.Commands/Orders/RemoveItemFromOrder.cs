@@ -10,39 +10,38 @@ using MediatR;
 
 namespace Ezley.Commands
 {
-    public class PlaceOrder:IRequest
+    public class RemoveItemFromOrder:IRequest
     {
         public EventUserInfo EventUserInfo { get; }
         public Guid Id { get; }
-        public string OrderName { get; }
-        public List<OrderItem> Items { get; }
+        public OrderItem Item { get; }
 
-        public PlaceOrder(EventUserInfo eventUserInfo, Guid id, string orderName, List<OrderItem> items)
+        public RemoveItemFromOrder(EventUserInfo eventUserInfo, Guid id, OrderItem item)
         {
             EventUserInfo = eventUserInfo;
             Id = id;
-            OrderName = orderName;
-            Items = items;
+            Item = item;
         }
     }
     
-    public class PlaceOrderHandler : IRequestHandler<PlaceOrder>
+    public class RemoveItemFromOrderHandler : IRequestHandler<RemoveItemFromOrder>
     {
         private IOrderSystemRepository _repository;
 
-        public PlaceOrderHandler(IOrderSystemRepository repository)
+        public RemoveItemFromOrderHandler(IOrderSystemRepository repository)
         {
             _repository = repository;
         }
         
         public async Task<Unit> Handle(
-            PlaceOrder command,
+            RemoveItemFromOrder command,
             CancellationToken cancellationToken)
         {
             if (command.EventUserInfo == null)
                 throw new ApplicationException("User must be defined.");
 
-            var order = new Order(command.Id, command.OrderName, command.Items);
+            var order = await _repository.LoadOrder(command.Id); 
+            order.RemoveItem(command.Item);
             var saved = await _repository.SaveOrder(command.EventUserInfo, order);
            
             if (!saved)

@@ -18,6 +18,5 @@ namespace Ezley.Events
             OrderName = orderName;
             Items = items;
         }
-
     }
 }

@@ -27,10 +27,10 @@ namespace Ezley.Testing
             var orderName = "Joey";
             var items = new List<OrderItem>
             {
-                new OrderItem(DateTime.Now.ToUniversalTime(),
+                new OrderItem(DateTime.UtcNow,
                     "Ham Sandwich",
                     12.00m),
-                new OrderItem(DateTime.Now.ToUniversalTime(),
+                new OrderItem(DateTime.UtcNow,
                     "Clam Chowder",
                     6.59m),
                 new OrderItem(DateTime.UtcNow,
@@ -44,7 +44,44 @@ namespace Ezley.Testing
             Assert.Equal(id, order2.Id);
             Assert.Equal(orderName, order2.OrderName);
             Assert.Equal(items, order2.Items);
+            Assert.Equal(3, order2.Items.Count);
+        }
+        
+        [Fact]
+        public async Task PlaceOrderAndAddItem()
+        {
+            var userId = "test|abcd123xx456efg";
+            var userInfo = new EventUserInfo(userId);
+            var id = Guid.NewGuid();
+            var orderName = "Joey";
+            var items = new List<OrderItem>
+            {
+                new OrderItem(DateTime.UtcNow,
+                    "Ham Sandwich",
+                    12.00m),
+                new OrderItem(DateTime.UtcNow,
+                    "Clam Chowder",
+                    6.59m),
+                new OrderItem(DateTime.UtcNow,
+                    "French Fries",
+                    4.85m)
+            };
 
+            var order = new Order(id, orderName, items);
+            var repo = GetOrderSystemRepository();
+
+            // add another item:
+            var addItem = new OrderItem(DateTime.UtcNow, "Fish Sandwich", 6.95m);
+            order.AddItem(addItem);
+             var saved = await repo.SaveOrder(userInfo, order);
+            // update items so we can use it for comparison
+            
+            items.Add(addItem);
+            var order2 = await repo.LoadOrder(id);
+            Assert.Equal(id, order2.Id);
+            Assert.Equal(orderName, order2.OrderName);
+            Assert.Equal(items, order2.Items);
+            Assert.Equal(4, order2.Items.Count);
         }
         
         private OrderSystemRepository GetOrderSystemRepository()

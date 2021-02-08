@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ES.Domain;
 using Ezley.Events;
 using Ezley.EventSourcing;
@@ -20,8 +21,19 @@ namespace Ezley.OrderSystem
         {
             Apply(new OrderPlaced(id, orderName, items));
         }
-        
-        
+
+        public void AddItem(OrderItem item)
+        {
+            Apply(new OrderItemAdded(this.Id, item));
+           
+        }
+        public void RemoveItem(OrderItem item)
+        {
+            if (Items.Any(x => x.Name == item.Name))
+            {
+                Apply(new OrderItemRemoved(this.Id, item));
+            }
+        }
         // Event handlers
         protected override void Mutate(IEvent @event)
         {
@@ -32,6 +44,24 @@ namespace Ezley.OrderSystem
             Id = @event.Id;
             OrderName = @event.OrderName;
             Items = @event.Items;
+        }
+
+        protected void MutateWhen(OrderItemAdded @event)
+        {
+            // build new list
+            var items = new List<OrderItem>();
+            items.AddRange(Items);
+            items.Add(@event.Item);
+            // set to list with new item
+            Items = items;
+        }  
+        protected void MutateWhen(OrderItemRemoved @event)
+        {
+            // build new list
+            var items = new List<OrderItem>();
+            items.AddRange(Items.Where(x => x.Name != OrderName));
+            // set to list without item
+            Items = items;
         }
         
         #region SnapshotFunctionality
