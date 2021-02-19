@@ -1,6 +1,6 @@
 namespace Ezley.Testing
 {
-    public class TestConfig
+    public partial class TestConfig
     {
         public readonly bool UseInMemoryEventStore = false;
         public readonly string EndpointUri = "https://yourdb.documents.azure.com:443/";
