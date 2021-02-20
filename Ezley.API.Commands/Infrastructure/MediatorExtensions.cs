@@ -11,8 +11,10 @@ namespace Ezley.API.Commands.Infrastructure
         {
 
             services
-                .AddCommand<PlaceOrder, PlaceOrderHandler>();
-              
+                .AddCommand<PlaceOrder, PlaceOrderHandler>()
+                .AddCommand<AddItemToOrder, AddItemToOrderHandler>()
+                .AddCommand<RemoveItemFromOrder, RemoveItemFromOrderHandler>();
+
             return services;
         }
         private static IServiceCollection AddCommand<TRequest, THandler>(this IServiceCollection services)

@@ -1,6 +1,8 @@
 using System.Reflection;
 using AutoMapper;
 using Ezley.API.Commands.Infrastructure;
+using Ezley.Events;
+using Ezley.EventSourcing;
 using Ezley.OrderSystem.Repositories;
 using Ezley.ProjectionStore;
 using Ezley.SnapshotStore;
@@ -133,17 +135,17 @@ namespace Ezley.API.Commands
             string snapshotContainer = Configuration["Azure:SnapshotContainer"];
             
             // Setup DI
-            services.AddTransient<IOrderSystemRepository, OrderSystemRepository>();
-            // services.AddTransient<IEventStore, CosmosDBEventStore>(serviceProvider =>
-            //     new CosmosDBEventStore(
-            //         new EventTypeResolver(), endpointUri, authKey, database, eventContainer)
-            // );
+            services.AddTransient<IEventStore, CosmosDBEventStore>(serviceProvider =>
+                new CosmosDBEventStore(
+                    new EventTypeResolver(), endpointUri, authKey, database, eventContainer)
+            );
             services.AddTransient<ISnapshotStore, CosmosSnapshotStore>(serviceProvider =>
                 new CosmosSnapshotStore(endpointUri, authKey, database,snapshotContainer));
 
             services.AddTransient<IViewRepository, CosmosDBViewRepository>(serviceProvider =>
                 new CosmosDBViewRepository(endpointUri, authKey, database, viewContainer));
-
+            
+            services.AddTransient<IOrderSystemRepository, OrderSystemRepository>();
         }
     }
 }

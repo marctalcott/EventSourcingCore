@@ -19,13 +19,15 @@ namespace Ezley.API.Commands.Controllers
 
         private string GetNameFromToken()
         {
-            string claimsId = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
-
-            var user = HttpContext.User;
-            string nameIdentifier = user.Claims.FirstOrDefault(x =>
-                x.Type == claimsId)?.Value;
-
-            return nameIdentifier;
+            return "anonymous";
+            // Use below when using Auth0 tokens
+            // string claimsId = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+            //
+            // var user = HttpContext.User;
+            // string nameIdentifier = user.Claims.FirstOrDefault(x =>
+            //     x.Type == claimsId)?.Value;
+            //
+            // return nameIdentifier;
         }
     }
  

@@ -44,6 +44,8 @@ namespace Ezley.ProjectionEngine
                     _eventContainer, _leaseContainer);
                 
                 projectionEngine.RegisterProjection(new OrderProjection());
+                projectionEngine.RegisterProjection(new PendingOrdersProjection());
+                
                 var serviceName = "ProjectionWorkerService";
                 await projectionEngine.StartAsync(serviceName);
 

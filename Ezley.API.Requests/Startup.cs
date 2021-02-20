@@ -119,16 +119,7 @@ namespace ES.API.Requests
 
         private void SetupSwagger(IServiceCollection services)
         {
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "Ezley API",
-                        Version = "v1"
-                    });
-            });
+            services.AddSwaggerGen();
         }
         
         private void SetupDI(IServiceCollection services)

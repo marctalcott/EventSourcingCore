@@ -1,4 +1,7 @@
 using System.Reflection;
+using Ezley.Projections;
+using Ezley.Requests;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ES.API.Requests.Infrastructure
@@ -7,10 +10,10 @@ namespace ES.API.Requests.Infrastructure
     {
         public static IServiceCollection AddMediatorHandlers(this IServiceCollection services, Assembly assembly)
         {
-
-            // // Requests
-            // services.AddTransient<IRequestHandler<GetAccount, AccountView>,
-            //     GetAccountHandler>();
+            services.AddTransient<IRequestHandler<GetPendingOrders, PendingOrdersView>,
+                GetPendingOrdersHandler>();
+            services.AddTransient<IRequestHandler<GetOrder, OrderView>,
+                GetOrderHandler>();
             return services;
         }
     }

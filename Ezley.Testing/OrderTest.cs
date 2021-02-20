@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Ezley.Events;
@@ -12,17 +11,25 @@ using Ezley.ProjectionStore;
 using Ezley.SnapshotStore;
 using Ezley.ValueObjects;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ezley.Testing
 {
     public class OrderTest
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public OrderTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
         private int delayMs = 3000;
         private TestConfig _testConfig = new TestConfig();
 
         [Fact]
         public async Task PlaceOrder()
         {
+            _testOutputHelper.WriteLine($"PlacingOrder");
              var userId = "test|abcd123xx456efg";
             var userInfo = new EventUserInfo(userId);
             var id = Guid.NewGuid();
@@ -47,39 +54,6 @@ namespace Ezley.Testing
             Assert.Equal(orderName, order2.OrderName);
             Assert.Equal(items, order2.Items);
             Assert.Equal(3, order2.Items.Count);
-        }
-        
-        
-        [Fact]
-        public async Task PlaceOrder100Times()
-        {
-            var userId = "test|abcd123xx456efg";
-            var userInfo = new EventUserInfo(userId);
-            
-            var items = new List<OrderItem>
-            {
-                new OrderItem(DateTime.UtcNow,
-                    "Ham Sandwich",
-                    12.00m),
-                new OrderItem(DateTime.UtcNow,
-                    "Clam Chowder",
-                    6.59m),
-                new OrderItem(DateTime.UtcNow,
-                    "French Fries",
-                    4.85m)
-            };
-            
-            var times = 100;
-            
-            for (int i = 0; i < times; i++)
-            {
-                Console.Write($"Iteration {i}");
-                var id = Guid.NewGuid();
-                var orderName = $"Person_{i}";
-                var order = new Order(id, orderName, items);
-                var repo = GetOrderSystemRepository();
-                var saved = await repo.SaveOrder(userInfo, order);
-            }
         }
         
         [Fact]
