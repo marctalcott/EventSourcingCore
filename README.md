@@ -1,5 +1,8 @@
 # Introduction 
 EventSourcingCore
+An Event Sourcing CQRS Project using an Azure Cosmos DB.
+
+# Description
 This project is an example of using Event Sourcing with an Azure Cosmos DB. 
 Additionally I have created an InMemory EventStore used by the unit testing.
 This project uses the example of a restaurant, where an order is placed, and the order can be editted by 
