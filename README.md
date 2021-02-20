@@ -1,6 +1,5 @@
 # Introduction 
-EventSourcingCore
-An Event Sourcing CQRS Project using an Azure Cosmos DB.
+An Event Sourcing, CQRS project using an Azure Cosmos DB.
 
 # Description
 This project is an example of using Event Sourcing with an Azure Cosmos DB. 
