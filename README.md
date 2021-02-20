@@ -28,7 +28,7 @@ Use the Primary key as the appSettings 'AuthKey' value.
 1. Build your solution.
 1. Run the test in _RunProjectionEngine.cs (now your projection engine is ready to build projections
 when data is added to your event store). Let that continue to run in the background.
-1. Next start your other tests by either running all tests in the solution or opening a specific file and running tests.s
+1. Next start your other tests by either running all tests in the solution or opening a specific file and running tests.
 
 
 
