@@ -24,7 +24,7 @@ Use the Primary key as the appSettings 'AuthKey' value.
 
 
 # Build and Test
-1. In Ezley.Testing, set the config settings in 'TestConfig.cs' to match your Azure Cosmos Db.
+1. In [Testing]/Ezley.Testing, set the config settings in 'TestConfig.cs' to match your Azure Cosmos Db.
 1. Build your solution.
 1. Run the test in _RunProjectionEngine.cs (now your projection engine is ready to build projections
 when data is added to your event store). Let that continue to run in the background.
