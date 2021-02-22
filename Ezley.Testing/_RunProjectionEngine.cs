@@ -26,6 +26,7 @@ namespace Ezley.Testing
                 _testConfig.EventContainer, _testConfig.LeasesContainer);
             
             projectionEngine.RegisterProjection(new OrderProjection());
+            projectionEngine.RegisterProjection(new PendingOrdersProjection());
             
             await projectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
