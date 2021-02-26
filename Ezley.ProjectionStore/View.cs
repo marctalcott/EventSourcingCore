@@ -35,6 +35,15 @@ namespace Ezley.ProjectionStore
 
             return change.LogicalSequenceNumber > LogicalCheckpoint.LogicalSequenceNumber;
         }
+        public bool IsNewerThanTimeStamp(Change change)
+        {
+            if (change.TimeStamp == LogicalCheckpoint.TimeStamp)
+            {
+                return !LogicalCheckpoint.ItemIds.Contains(change.Id);
+            }
+
+            return change.LogicalSequenceNumber > LogicalCheckpoint.LogicalSequenceNumber;
+        }
 
         public void UpdateCheckpoint(Change change)
         {

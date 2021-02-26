@@ -7,5 +7,8 @@ namespace Ezley.ProjectionStore
     {
         [JsonProperty("_lsn")]
         public long LogicalSequenceNumber { get; set; }
+        
+        [JsonProperty("_ts")]
+        public long TimeStamp { get; set; }
     }
 }

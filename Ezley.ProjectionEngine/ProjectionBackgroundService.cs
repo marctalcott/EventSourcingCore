@@ -12,36 +12,64 @@ namespace Ezley.ProjectionEngine
     public class ProjectionBackgroundService: BackgroundService
     {
         private ILogger<ProjectionBackgroundService> _logger;
-        private string _endpointUri;
-        private string _database;
-        private string _authKey;
-        private string _eventContainer;
-        private string _viewContainer;
-        private string _leaseContainer;
+        private string _eventsEndpointUri;
+        private string _eventsDatabase;
+        private string _eventsAuthKey;
+        private string _eventsContainer;
+        
+        private string _viewsEndpointUri;
+        private string _viewsDatabase;
+        private string _viewsAuthKey;
+        private string _viewsContainer;
+        
+        private string _leasesEndpointUri;
+        private string _leasesDatabase;
+        private string _leasesAuthKey;
+        private string _leasesContainer;
 
+        private long _startDateTimeUtcEpochSeconds;
+        private DateTime _startDateTimeUtc;
         public ProjectionBackgroundService(IConfiguration configuration,
             ILogger<ProjectionBackgroundService> logger)
         {
-            _endpointUri = configuration["Azure:EndPointUri"];
-            _database = configuration["Azure:Database"];
-            _authKey = configuration["Azure:AuthKey"];
-            _eventContainer = configuration["Azure:EventContainer"];
-            _viewContainer = configuration["Azure:ViewContainer"];
-            _leaseContainer = configuration["Azure:LeaseContainer"];
+            _eventsEndpointUri = configuration["Azure:EventsEndPointUri"];
+            _eventsDatabase = configuration["Azure:EventsDatabase"];
+            _eventsAuthKey = configuration["Azure:EventsAuthKey"];
+            _eventsContainer = configuration["Azure:EventsContainer"];
+            
+            _viewsEndpointUri = configuration["Azure:ViewsEndPointUri"];
+            _viewsDatabase = configuration["Azure:ViewsDatabase"];
+            _viewsAuthKey = configuration["Azure:ViewsAuthKey"];
+            _viewsContainer = configuration["Azure:ViewsContainer"];
+            
+            _leasesEndpointUri = configuration["Azure:LeasesEndPointUri"];
+            _leasesDatabase = configuration["Azure:LeasesDatabase"];
+            _leasesAuthKey = configuration["Azure:LeasesAuthKey"];
+            _leasesContainer = configuration["Azure:LeasesContainer"];
+
+            // get datetime from epoch seconds
+            _startDateTimeUtcEpochSeconds = long.Parse(configuration["Azure:ProjectionStartTimeUtcExclusive"]);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            _startDateTimeUtc = epoch.AddSeconds(_startDateTimeUtcEpochSeconds);
+            
             _logger = logger;
         }
-
+       
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 var eventTypeResolver = new EventTypeResolver();
-                var viewRepo = new CosmosDBViewRepository(_endpointUri,_authKey,_database, _viewContainer);
+                var viewRepo = new CosmosDBViewRepository(_viewsEndpointUri,
+                    _viewsAuthKey, _viewsDatabase, _viewsContainer);
 
+                
                 var projectionEngine = new CosmosDBProjectionEngine(
                     eventTypeResolver, viewRepo,
-                    _endpointUri, _authKey, _database, 
-                    _eventContainer, _leaseContainer);
+                    _eventsEndpointUri, _eventsAuthKey, _eventsDatabase, 
+                    _leasesEndpointUri, _leasesAuthKey, _leasesDatabase, 
+                    _eventsContainer,_leasesContainer, _startDateTimeUtc
+                    );
                 
                 projectionEngine.RegisterProjection(new OrderProjection());
                 projectionEngine.RegisterProjection(new PendingOrdersProjection());

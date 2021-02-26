@@ -13,6 +13,9 @@ namespace Ezley.ProjectionStore
 
         [JsonProperty("lsn")]
         public long LogicalSequenceNumber { get; set; }
+        
+        [JsonProperty("_ts")]
+        public long TimeStamp { get; set; }
 
         [JsonProperty("itemIds")]
         public List<string> ItemIds { get; }
