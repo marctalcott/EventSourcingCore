@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Ezley.Events;
 using Ezley.Projections;
@@ -15,15 +16,15 @@ namespace Ezley.Testing
         {
             var eventTypeResolver = new EventTypeResolver();
             var viewRepo = new CosmosDBViewRepository(
-                _testConfig.EndpointUri, 
-                _testConfig.AuthKey,
-                _testConfig.Database,
-                _testConfig.ViewContainer);
-
-            var projectionEngine = new CosmosDBProjectionEngine(eventTypeResolver,
-                viewRepo,
-                _testConfig.EndpointUri, _testConfig.AuthKey, _testConfig.Database,
-                _testConfig.EventContainer, _testConfig.LeasesContainer);
+                _testConfig.ViewsEndpointUri, 
+                _testConfig.ViewsAuthKey,
+                _testConfig.ViewsDatabase,
+                _testConfig.ViewsContainer);
+            
+            var projectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, viewRepo,
+                _testConfig.EventsEndpointUri, _testConfig.EventsAuthKey, _testConfig.EventsDatabase,
+                _testConfig.LeasesEndpointUri, _testConfig.LeasesAuthKey, _testConfig.LeasesDatabase,
+                _testConfig.EventContainer, _testConfig.LeasesContainer, _testConfig.StartTimeEpoch);
             
             projectionEngine.RegisterProjection(new OrderProjection());
             projectionEngine.RegisterProjection(new PendingOrdersProjection());

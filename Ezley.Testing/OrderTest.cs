@@ -142,21 +142,20 @@ namespace Ezley.Testing
             {
                 var eventStore = new CosmosDBEventStore(
                     eventTypeResolver,
-                    _testConfig.EndpointUri,
-                    _testConfig.AuthKey, _testConfig.Database, _testConfig.EventContainer);
+                    _testConfig.EventsEndpointUri,
+                    _testConfig.EventsAuthKey, _testConfig.EventsDatabase, _testConfig.EventContainer);
 
-                var snapshotStore = new CosmosSnapshotStore(_testConfig.EndpointUri,
-                    _testConfig.AuthKey,
-                    _testConfig.Database, _testConfig.SnapshotContainer);
+                var snapshotStore = new CosmosSnapshotStore(_testConfig.SnapshotsEndpointUri,
+                    _testConfig.SnapshotsAuthKey,
+                    _testConfig.SnapshotsDatabase, _testConfig.SnapshotsContainer);
                 return new OrderSystemRepository(eventStore, snapshotStore);
-
             }
         }
        
         private CosmosDBViewRepository GetViewRepository()
         {
-            return new CosmosDBViewRepository(_testConfig.EndpointUri, _testConfig.AuthKey,
-                _testConfig.Database, _testConfig.ViewContainer);
+            return new CosmosDBViewRepository(_testConfig.ViewsEndpointUri, _testConfig.ViewsAuthKey,
+                _testConfig.ViewsDatabase, _testConfig.ViewsContainer);
         }
     }
 }
