@@ -49,9 +49,7 @@ namespace Ezley.ProjectionEngine
 
             // get datetime from epoch seconds
             _startDateTimeUtcEpochSeconds = long.Parse(configuration["Azure:ProjectionStartTimeUtcExclusive"]);
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _startDateTimeUtc = epoch.AddSeconds(_startDateTimeUtcEpochSeconds);
-            
+
             _logger = logger;
         }
        
@@ -68,7 +66,7 @@ namespace Ezley.ProjectionEngine
                     eventTypeResolver, viewRepo,
                     _eventsEndpointUri, _eventsAuthKey, _eventsDatabase, 
                     _leasesEndpointUri, _leasesAuthKey, _leasesDatabase, 
-                    _eventsContainer,_leasesContainer, _startDateTimeUtc
+                    _eventsContainer,_leasesContainer, _startDateTimeUtcEpochSeconds
                     );
                 
                 projectionEngine.RegisterProjection(new OrderProjection());

@@ -22,7 +22,7 @@ namespace Ezley.ProjectionStore
         private readonly string _leaseContainerId;
         private readonly List<IProjection> _projections;
         private ChangeFeedProcessor _changeFeedProcessor;
-        private DateTime _startTimeUtc; // Sets the time (exclusive) to start looking for changes after.
+        private long _epochStartTime; // Sets the time (exclusive) to start looking for changes after.
 
         /// <summary>
         /// 
@@ -37,11 +37,11 @@ namespace Ezley.ProjectionStore
         /// <param name="leaseDatabaseId"></param>
         /// <param name="eventContainerId"></param>
         /// <param name="leaseContainerId"></param>
-        /// <param name="startTimeUtc">Sets the time (exclusive) to start looking for changes after.</param>
+        /// <param name="epochStartTime">Sets the time (exclusive) to start looking for changes after.</param>
         public CosmosDBProjectionEngine(IEventTypeResolver eventTypeResolver, IViewRepository viewRepository,
             string eventEndpointUrl, string eventAuthorizationKey, string eventDatabaseId,
             string leaseEndpointUrl, string leaseAuthorizationKey, string leaseDatabaseId, string eventContainerId,
-            string leaseContainerId, DateTime startTimeUtc)
+            string leaseContainerId, long epochStartTime)
         {
             _eventTypeResolver = eventTypeResolver;
             _viewRepository = viewRepository;
@@ -54,7 +54,7 @@ namespace Ezley.ProjectionStore
             _eventContainerId = eventContainerId;
             _leaseContainerId = leaseContainerId;
             _projections = new List<IProjection>();
-            _startTimeUtc = startTimeUtc;
+            _epochStartTime = epochStartTime;
         }
 
         public void RegisterProjection(IProjection projection)
@@ -70,18 +70,13 @@ namespace Ezley.ProjectionStore
             Container eventContainer = eventClient.GetContainer(_eventDatabaseId, _eventContainerId);
             Container leaseContainer = leaseClient.GetContainer(_leaseDatabaseId, _leaseContainerId);
 
-            var addminutes = 6 * 24 * 60;
-            var myTime1 =DateTimeOffset.FromUnixTimeSeconds(1614310402).UtcDateTime;
-            var myTime = DateTime.UnixEpoch;
-            myTime = myTime.AddSeconds(1614310402);
-            _startTimeUtc = _startTimeUtc.AddMinutes(addminutes);
+           
+            var myTime =DateTimeOffset.FromUnixTimeSeconds(_epochStartTime).UtcDateTime;
+            
             _changeFeedProcessor = eventContainer
                 .GetChangeFeedProcessorBuilder<Change>("Projection", HandleChangesAsync)
                 .WithInstanceName(instanceName)
                 .WithLeaseContainer(leaseContainer)
-                // .WithStartTime(new DateTime(2020, 5, 1, 0, 0, 0, DateTimeKind.Utc))
-                //.WithStartTime(_startTimeUtc)
-                //.WithStartTime(DateTimeOffset.FromUnixTimeSeconds(1614256746).UtcDateTime)
                 .WithStartTime(myTime)
                 .Build();
 
@@ -95,11 +90,16 @@ namespace Ezley.ProjectionStore
 
         private async Task HandleChangesAsync(IReadOnlyCollection<Change> changes, CancellationToken cancellationToken)
         {
-            long epoch = 1614310402;
-            var myTime =DateTimeOffset.FromUnixTimeSeconds(epoch).UtcDateTime;
-            var newChanges = changes.Where(x => x.TimeStamp > epoch).ToList();
+            // This is needed bc the 'WithStartTime' isn't working for me on the ChangeFeedBuilder
+            // This would only be run through the first time after deleting leases container and trying to 
+            // replay some events.
+            if (changes.First().TimeStamp <= _epochStartTime)
+            {
+                 changes = changes.Where(x => x.TimeStamp > _epochStartTime)
+                    .ToList().AsReadOnly();
+            }
             
-            foreach (var change in newChanges)
+            foreach (var change in changes)
             {
               //  throw new ApplicationException();
                 var @event = change.GetEvent(_eventTypeResolver);

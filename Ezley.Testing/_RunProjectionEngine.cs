@@ -20,14 +20,11 @@ namespace Ezley.Testing
                 _testConfig.ViewsAuthKey,
                 _testConfig.ViewsDatabase,
                 _testConfig.ViewsContainer);
-
-            // start from the beginning
-            var startTimeUtc = DateTime.MinValue;
-           
+            
             var projectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, viewRepo,
                 _testConfig.EventsEndpointUri, _testConfig.EventsAuthKey, _testConfig.EventsDatabase,
                 _testConfig.LeasesEndpointUri, _testConfig.LeasesAuthKey, _testConfig.LeasesDatabase,
-                _testConfig.EventContainer, _testConfig.LeasesContainer, startTimeUtc);
+                _testConfig.EventContainer, _testConfig.LeasesContainer, _testConfig.StartTimeEpoch);
             
             projectionEngine.RegisterProjection(new OrderProjection());
             projectionEngine.RegisterProjection(new PendingOrdersProjection());

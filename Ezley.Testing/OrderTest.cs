@@ -146,7 +146,7 @@ namespace Ezley.Testing
                     _testConfig.EventsAuthKey, _testConfig.EventsDatabase, _testConfig.EventContainer);
 
                 var snapshotStore = new CosmosSnapshotStore(_testConfig.SnapshotsEndpointUri,
-                    _testConfig.SnapshotsEndpointUri,
+                    _testConfig.SnapshotsAuthKey,
                     _testConfig.SnapshotsDatabase, _testConfig.SnapshotsContainer);
                 return new OrderSystemRepository(eventStore, snapshotStore);
             }
