@@ -28,6 +28,8 @@ namespace Ezley.Testing
             
             projectionEngine.RegisterProjection(new OrderProjection());
             projectionEngine.RegisterProjection(new PendingOrdersProjection());
+            projectionEngine.RegisterProjection(new CustomerProjection());
+            projectionEngine.RegisterProjection(new AllCustomersProjection());
             
             await projectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
