@@ -30,7 +30,7 @@ namespace Ezley.Testing
         [Fact]
         public async Task Register1000Customers()
         {
-            var max = 1000;     // max customers to add
+            var max = 100;     // max customers to add
             var ct = 0;         // current customer count
             
             for (int i = 0; ct < max;)
@@ -53,7 +53,7 @@ namespace Ezley.Testing
                 }
                 if (i % 9 == 0)
                 {
-                    RegisterCustomerAndChangeMiddleInitial();
+                    await RegisterCustomerAndChangeMiddleInitial();
                     ct++;
                 }
                 _testOutputHelper.WriteLine($"Customers {ct}");
@@ -194,8 +194,8 @@ namespace Ezley.Testing
        
         private CosmosDBViewRepository GetViewRepository()
         {
-            return new CosmosDBViewRepository(_testConfig.ViewsEndpointUri, _testConfig.ViewsAuthKey,
-                _testConfig.ViewsDatabase, _testConfig.ViewsContainer);
+            return new CosmosDBViewRepository(_testConfig.CustomerViewsEndpointUri, _testConfig.CustomerViewsAuthKey,
+                _testConfig.CustomerViewsDatabase, _testConfig.CustomerViewsContainer);
         }
         
         

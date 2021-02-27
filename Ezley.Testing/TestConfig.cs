@@ -8,28 +8,34 @@ namespace Ezley.Testing
         public long StartTimeEpoch = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
         
         public readonly bool UseInMemoryEventStore = false;
-        public readonly string EventsEndpointUri = "https://esdemo1.documents.azure.com:443/";
+        public readonly string EventsEndpointUri = "https://esdemo2.documents.azure.com:443/";
         public readonly string EventsDatabase = "esdemo";
         public readonly string EventsAuthKey = 
-            "aENKTvufKynrTcKWbVJH8iMIOR7KIfeh6YqFzN7epC5y3Ad0vVsHNp3UtcSELVL77UCfsTfdxlA12g1ola5PMA==";
+            "CMQjeSQZ9QDwaQT7bSkAX1ZbHfyHy69qWfC1cCThsqUEC8hpZKclQuCIxUSWZzVObCsVmDeElu8k97opO38gpw==";
         public readonly string EventContainer = "events";
         
-        public readonly string LeasesEndpointUri = "https://esdemo1.documents.azure.com:443/";
+        public readonly string LeasesEndpointUri = "https://esdemo2.documents.azure.com:443/";
         public readonly string LeasesDatabase = "esdemo";
         public readonly string LeasesAuthKey = 
-            "aENKTvufKynrTcKWbVJH8iMIOR7KIfeh6YqFzN7epC5y3Ad0vVsHNp3UtcSELVL77UCfsTfdxlA12g1ola5PMA==";
+            "CMQjeSQZ9QDwaQT7bSkAX1ZbHfyHy69qWfC1cCThsqUEC8hpZKclQuCIxUSWZzVObCsVmDeElu8k97opO38gpw==";
         public readonly string LeasesContainer = "leases";
         
-        public readonly string ViewsEndpointUri = "https://esdemo1.documents.azure.com:443/";
-        public readonly string ViewsDatabase = "esdemo";
-        public readonly string ViewsAuthKey = 
-            "aENKTvufKynrTcKWbVJH8iMIOR7KIfeh6YqFzN7epC5y3Ad0vVsHNp3UtcSELVL77UCfsTfdxlA12g1ola5PMA==";
-        public readonly string ViewsContainer = "views";
+        public readonly string OrderViewsEndpointUri = "https://esdemo2.documents.azure.com:443/";
+        public readonly string OrderViewsDatabase = "esdemo";
+        public readonly string OrderViewsAuthKey = 
+            "CMQjeSQZ9QDwaQT7bSkAX1ZbHfyHy69qWfC1cCThsqUEC8hpZKclQuCIxUSWZzVObCsVmDeElu8k97opO38gpw==";
+        public readonly string OrderViewsContainer = "orderviews";
         
-        public readonly string SnapshotsEndpointUri = "https://esdemo1.documents.azure.com:443/";
+        public readonly string CustomerViewsEndpointUri = "https://esdemo2.documents.azure.com:443/";
+        public readonly string CustomerViewsDatabase = "esdemo";
+        public readonly string CustomerViewsAuthKey = 
+            "CMQjeSQZ9QDwaQT7bSkAX1ZbHfyHy69qWfC1cCThsqUEC8hpZKclQuCIxUSWZzVObCsVmDeElu8k97opO38gpw==";
+        public readonly string CustomerViewsContainer = "customerviews";
+        
+        public readonly string SnapshotsEndpointUri = "https://esdemo2.documents.azure.com:443/";
         public readonly string SnapshotsDatabase = "esdemo";
         public readonly string SnapshotsAuthKey = 
-            "aENKTvufKynrTcKWbVJH8iMIOR7KIfeh6YqFzN7epC5y3Ad0vVsHNp3UtcSELVL77UCfsTfdxlA12g1ola5PMA==";
+            "CMQjeSQZ9QDwaQT7bSkAX1ZbHfyHy69qWfC1cCThsqUEC8hpZKclQuCIxUSWZzVObCsVmDeElu8k97opO38gpw==";
         public readonly string SnapshotsContainer = "snapshots";
         
         

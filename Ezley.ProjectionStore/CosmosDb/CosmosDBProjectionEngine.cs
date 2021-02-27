@@ -23,12 +23,13 @@ namespace Ezley.ProjectionStore
         private readonly List<IProjection> _projections;
         private ChangeFeedProcessor _changeFeedProcessor;
         private long _epochStartTime; // Sets the time (exclusive) to start looking for changes after.
-
+        private string _processorName;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="eventTypeResolver"></param>
         /// <param name="viewRepository"></param>
+        /// <param name="processorName"></param>
         /// <param name="eventEndpointUrl"></param>
         /// <param name="eventAuthorizationKey"></param>
         /// <param name="eventDatabaseId"></param>
@@ -39,12 +40,14 @@ namespace Ezley.ProjectionStore
         /// <param name="leaseContainerId"></param>
         /// <param name="epochStartTime">Sets the time (exclusive) to start looking for changes after.</param>
         public CosmosDBProjectionEngine(IEventTypeResolver eventTypeResolver, IViewRepository viewRepository,
+            string processorName,
             string eventEndpointUrl, string eventAuthorizationKey, string eventDatabaseId,
             string leaseEndpointUrl, string leaseAuthorizationKey, string leaseDatabaseId, string eventContainerId,
             string leaseContainerId, long epochStartTime)
         {
             _eventTypeResolver = eventTypeResolver;
             _viewRepository = viewRepository;
+            _processorName = processorName;
             _eventEndpointUrl = eventEndpointUrl;
             _eventAuthorizationKey = eventAuthorizationKey;
             _eventDatabaseId = eventDatabaseId;
@@ -74,7 +77,7 @@ namespace Ezley.ProjectionStore
             var myTime =DateTimeOffset.FromUnixTimeSeconds(_epochStartTime).UtcDateTime;
             
             _changeFeedProcessor = eventContainer
-                .GetChangeFeedProcessorBuilder<Change>("Projection", HandleChangesAsync)
+                .GetChangeFeedProcessorBuilder<Change>(_processorName, HandleChangesAsync)
                 .WithInstanceName(instanceName)
                 .WithLeaseContainer(leaseContainer)
                 .WithStartTime(myTime)
