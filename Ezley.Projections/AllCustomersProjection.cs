@@ -15,7 +15,6 @@ namespace Ezley.Projections
         {
             Customers = new List<CustomerView>();
         }
-        
     }
     
     public class AllCustomersProjection : Projection<AllCustomersView>
@@ -33,7 +32,8 @@ namespace Ezley.Projections
         
         private void WhenCustomerRegistered(CustomerRegistered e, AllCustomersView view)
         {
-            var customer = new CustomerView(e.Id, e.FirstName, e.LastName, e.MiddleInitial);
+            var customer = new CustomerView(e.Id, e.FirstName, e.LastName, e.MiddleInitial,
+                e.MiddleName);
             view.Customers.Add(customer);
         }
 
@@ -68,6 +68,17 @@ namespace Ezley.Projections
             }
 
             existingCustomer.MiddleInitial = e.MiddleInitial;
+        }
+        
+        private void WhenCustomerMiddleNameChanged(CustomerMiddleNameChanged e, AllCustomersView view)
+        {
+            var existingCustomer = view.Customers.SingleOrDefault(x => x.Id == e.Id);
+            if (existingCustomer == null)
+            {
+                throw new ApplicationException("Customer does not exist...");
+            }
+
+            existingCustomer.MiddleName = e.MiddleName;
         }
     }    
 }

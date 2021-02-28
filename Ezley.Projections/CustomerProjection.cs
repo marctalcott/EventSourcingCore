@@ -10,17 +10,21 @@ namespace Ezley.Projections
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleInitial { get; set; }
+        
+        public string MiddleName { get; set; }
 
         public CustomerView()
         {
         }
 
-        public CustomerView(Guid id, string firstName, string lastName, string middleInitial)
+        public CustomerView(Guid id, string firstName, string lastName, string middleInitial,
+            string middleName)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             MiddleInitial = middleInitial;
+            MiddleName = middleName;
         }
     }
     
@@ -32,6 +36,7 @@ namespace Ezley.Projections
             RegisterHandler<CustomerFirstNameChanged>(WhenFirstNameChanged);
             RegisterHandler<CustomerLastNameChanged>(WhenLastNameChanged);
             RegisterHandler<CustomerMiddleInitialChanged>(WhenMiddleInitialChanged);
+            RegisterHandler<CustomerMiddleNameChanged>(WhenMiddleNameChanged);
         }
         
         private void WhenRegistered(CustomerRegistered e, CustomerView view)
@@ -40,6 +45,7 @@ namespace Ezley.Projections
             view.FirstName = e.FirstName;
             view.LastName = e.LastName;
             view.MiddleInitial = e.MiddleInitial;
+            view.MiddleName = e.MiddleName;
         }
 
         private void WhenFirstNameChanged(CustomerFirstNameChanged e, CustomerView view)
@@ -55,6 +61,11 @@ namespace Ezley.Projections
         private void WhenMiddleInitialChanged(CustomerMiddleInitialChanged e, CustomerView view)
         {
             view.MiddleInitial = e.MiddleInitial;
+        }
+        
+        private void WhenMiddleNameChanged(CustomerMiddleNameChanged e, CustomerView view)
+        {
+            view.MiddleName = e.MiddleName;
         }
     }    
 }
