@@ -12,6 +12,10 @@ namespace Ezley.OrderSystem.Repositories
         Task<Order> LoadOrder(Guid id);
         Task<bool> SaveOrder(EventUserInfo eventUserInfo, Order aggregate, OrderSnapshot snapshot = null);
         Task<bool> SaveOrderSnapshot(OrderSnapshot snapshot);
+        
+        Task<Customer> LoadCustomer(Guid id);
+        Task<bool> SaveCustomer(EventUserInfo eventUserInfo, Customer aggregate);
+        
     }
 
     public class OrderSystemRepository : IOrderSystemRepository
@@ -78,6 +82,27 @@ namespace Ezley.OrderSystem.Repositories
         }
         #endregion
          
+        
+        #region Customer
+        public async Task<Customer> LoadCustomer(Guid id)   
+        {
+            var stream = await _eventStore.LoadStreamAsyncOrThrowNotFound(id.ToString());
+            return new Customer(stream.Events);
+        }
+
+        public async Task<bool> SaveCustomer(EventUserInfo eventUserInfo, Customer aggregate)
+        {
+            if (!aggregate.Changes.Any())
+            {
+                return true;
+            }
+
+            var streamId = aggregate.Id.ToString();
+            return await _eventStore.AppendToStreamAsync(eventUserInfo, streamId,
+                    aggregate.Version,
+                    aggregate.Changes);
+        }
+        #endregion
          
     }
 }
