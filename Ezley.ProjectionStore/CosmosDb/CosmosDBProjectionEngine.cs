@@ -73,8 +73,9 @@ namespace Ezley.ProjectionStore
             Container eventContainer = eventClient.GetContainer(_eventDatabaseId, _eventContainerId);
             Container leaseContainer = leaseClient.GetContainer(_leaseDatabaseId, _leaseContainerId);
 
-           
-            var myTime =DateTimeOffset.FromUnixTimeSeconds(_epochStartTime).UtcDateTime;
+            // start with events at a specific time
+            // https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor
+            var myTime = DateTimeOffset.FromUnixTimeSeconds(_epochStartTime).UtcDateTime;
             
             _changeFeedProcessor = eventContainer
                 .GetChangeFeedProcessorBuilder<Change>(_processorName, HandleChangesAsync)
