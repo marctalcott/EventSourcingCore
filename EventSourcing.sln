@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezley.OrderSystem", "Ezley.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezley.ProjectionEngine", "Ezley.ProjectionEngine\Ezley.ProjectionEngine.csproj", "{8B895796-7E83-46CB-A971-EF2A92DAF969}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ezley.CustomerProjectionEngine", "Ezley.CustomerProjectionEngine\Ezley.CustomerProjectionEngine.csproj", "{7F61E6AF-697F-4611-AF2E-FD44CBF3B252}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{8B895796-7E83-46CB-A971-EF2A92DAF969}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B895796-7E83-46CB-A971-EF2A92DAF969}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B895796-7E83-46CB-A971-EF2A92DAF969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F61E6AF-697F-4611-AF2E-FD44CBF3B252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F61E6AF-697F-4611-AF2E-FD44CBF3B252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F61E6AF-697F-4611-AF2E-FD44CBF3B252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F61E6AF-697F-4611-AF2E-FD44CBF3B252}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1809CA66-DBC6-4A0F-A30B-BFDDFA24587A} = {CF29C83B-2D54-4DB9-98BA-A7EF1CB15F43}
@@ -119,5 +125,6 @@ Global
 		{5E4CAEDA-6F8A-429B-84B6-EFC47FEE9AC4} = {24E2015C-2A77-42B8-873E-705BD1853C7D}
 		{408AAFCA-B8C5-4A33-BA3C-C08E70680203} = {621F4E9C-7411-49E5-8CDD-142C0F1CD5AC}
 		{8B895796-7E83-46CB-A971-EF2A92DAF969} = {1DBF9E3F-67CB-47E8-A878-23F4E81947D8}
+		{7F61E6AF-697F-4611-AF2E-FD44CBF3B252} = {1DBF9E3F-67CB-47E8-A878-23F4E81947D8}
 	EndGlobalSection
 EndGlobal

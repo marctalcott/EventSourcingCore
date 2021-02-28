@@ -15,24 +15,37 @@ namespace Ezley.Testing
         public async Task RegisterProjectionsAsync()
         {
             var eventTypeResolver = new EventTypeResolver();
-            var viewRepo = new CosmosDBViewRepository(
-                _testConfig.ViewsEndpointUri, 
-                _testConfig.ViewsAuthKey,
-                _testConfig.ViewsDatabase,
-                _testConfig.ViewsContainer);
-            
-            var projectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, viewRepo,
+            var orderViewRepo = new CosmosDBViewRepository(
+                _testConfig.OrderViewsEndpointUri, 
+                _testConfig.OrderViewsAuthKey,
+                _testConfig.OrderViewsDatabase,
+                _testConfig.OrderViewsContainer);
+            var orderProcessorName = "OrderUnitTestsProcessor";
+            var orderProjectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, orderViewRepo,orderProcessorName,
                 _testConfig.EventsEndpointUri, _testConfig.EventsAuthKey, _testConfig.EventsDatabase,
                 _testConfig.LeasesEndpointUri, _testConfig.LeasesAuthKey, _testConfig.LeasesDatabase,
                 _testConfig.EventContainer, _testConfig.LeasesContainer, _testConfig.StartTimeEpoch);
             
-            projectionEngine.RegisterProjection(new OrderProjection());
-            projectionEngine.RegisterProjection(new PendingOrdersProjection());
-            projectionEngine.RegisterProjection(new CustomerProjection());
-            projectionEngine.RegisterProjection(new AllCustomersProjection());
+            orderProjectionEngine.RegisterProjection(new OrderProjection());
+            orderProjectionEngine.RegisterProjection(new PendingOrdersProjection());
             
-            await projectionEngine.StartAsync("UnitTests");
+            var customerViewRepo = new CosmosDBViewRepository(
+                _testConfig.CustomerViewsEndpointUri, 
+                _testConfig.CustomerViewsAuthKey,
+                _testConfig.CustomerViewsDatabase,
+                _testConfig.CustomerViewsContainer);
+            var customerProcessorName = "OrderUnitTestsProcessor";
+            var customerProjectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, customerViewRepo,customerProcessorName,
+                _testConfig.EventsEndpointUri, _testConfig.EventsAuthKey, _testConfig.EventsDatabase,
+                _testConfig.LeasesEndpointUri, _testConfig.LeasesAuthKey, _testConfig.LeasesDatabase,
+                _testConfig.EventContainer, _testConfig.LeasesContainer, _testConfig.StartTimeEpoch);
+            
+            customerProjectionEngine.RegisterProjection(new CustomerProjection());
+            customerProjectionEngine.RegisterProjection(new AllCustomersProjection());
+            
+            await orderProjectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
         }
+        
     }
 }

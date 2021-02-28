@@ -7,7 +7,7 @@ using Ezley.ProjectionStore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Ezley.ProjectionEngine
+namespace Ezley.CustomerProjectionEngine
 {
     public class ProjectionBackgroundService: BackgroundService
     {
@@ -29,8 +29,8 @@ namespace Ezley.ProjectionEngine
 
         private long _startDateTimeUtcEpochSeconds;
         private DateTime _startDateTimeUtc;
-
-        private string _processorName = "CustomerProjectionEngineProcessor";
+        private string _processorName = "CustomerProjectionEngineProcess";
+        
         public ProjectionBackgroundService(IConfiguration configuration,
             ILogger<ProjectionBackgroundService> logger)
         {
@@ -65,18 +65,16 @@ namespace Ezley.ProjectionEngine
 
                 
                 var projectionEngine = new CosmosDBProjectionEngine(
-                    eventTypeResolver, viewRepo, _processorName,
+                    eventTypeResolver, viewRepo,_processorName,
                     _eventsEndpointUri, _eventsAuthKey, _eventsDatabase, 
                     _leasesEndpointUri, _leasesAuthKey, _leasesDatabase, 
                     _eventsContainer,_leasesContainer, _startDateTimeUtcEpochSeconds
                     );
-                
-                projectionEngine.RegisterProjection(new OrderProjection());
-                projectionEngine.RegisterProjection(new PendingOrdersProjection());
+           
                 projectionEngine.RegisterProjection(new CustomerProjection());
                 projectionEngine.RegisterProjection(new AllCustomersProjection());
                 
-                var serviceName = "ProjectionWorkerService";
+                var serviceName = "CustomersProjectionWorkerService";
                 await projectionEngine.StartAsync(serviceName);
 
                 _logger.LogInformation($"{serviceName} running at: {DateTimeOffset.Now}");

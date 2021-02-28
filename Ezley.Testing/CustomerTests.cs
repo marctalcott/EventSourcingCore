@@ -161,8 +161,8 @@ namespace Ezley.Testing
        
         private CosmosDBViewRepository GetViewRepository()
         {
-            return new CosmosDBViewRepository(_testConfig.ViewsEndpointUri, _testConfig.ViewsAuthKey,
-                _testConfig.ViewsDatabase, _testConfig.ViewsContainer);
+            return new CosmosDBViewRepository(_testConfig.CustomerViewsEndpointUri, _testConfig.CustomerViewsAuthKey,
+                _testConfig.CustomerViewsDatabase, _testConfig.CustomerViewsContainer);
         }
         
         

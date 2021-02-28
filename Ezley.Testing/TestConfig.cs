@@ -20,16 +20,22 @@ namespace Ezley.Testing
             "[yourkey]";
         public readonly string LeasesContainer = "leases";
         
-        public readonly string ViewsEndpointUri = "https://[yourdb].documents.azure.com:443/";
-        public readonly string ViewsDatabase = "esdemo";
-        public readonly string ViewsAuthKey = 
+        public readonly string OrderViewsEndpointUri = "https://[yourdb].documents.azure.com:443/";
+        public readonly string OrderViewsDatabase = "esdemo";
+        public readonly string OrderViewsAuthKey = 
             "[yourkey]";
-        public readonly string ViewsContainer = "views";
+        public readonly string OrderViewsContainer = "orderviews";
+        
+        public readonly string CustomerViewsEndpointUri = "https://[yourdb].documents.azure.com:443/";
+        public readonly string CustomerViewsDatabase = "esdemo";
+        public readonly string CustomerViewsAuthKey = 
+            "[yourkey]";
+        public readonly string CustomerViewsContainer = "customerviews";
         
         public readonly string SnapshotsEndpointUri = "https://[yourdb].documents.azure.com:443/";
         public readonly string SnapshotsDatabase = "esdemo";
         public readonly string SnapshotsAuthKey = 
-            "[yourkey]";
+             "[yourkey]";
         public readonly string SnapshotsContainer = "snapshots";
         
         
