@@ -73,6 +73,8 @@ namespace Ezley.ProjectionEngine
                 
                 projectionEngine.RegisterProjection(new OrderProjection());
                 projectionEngine.RegisterProjection(new PendingOrdersProjection());
+                projectionEngine.RegisterProjection(new CustomerProjection());
+                projectionEngine.RegisterProjection(new AllCustomersProjection());
                 
                 var serviceName = "ProjectionWorkerService";
                 await projectionEngine.StartAsync(serviceName);
