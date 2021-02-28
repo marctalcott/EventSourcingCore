@@ -37,18 +37,17 @@ namespace Ezley.Testing
             var id = Guid.NewGuid();
             var firstName = $"First_{id}";
             var lastName = $"Last_{id}";
-            var mi = GetMiddleInitial().ToString();
+            var middleName = $"Middle_{id}";
 
             var repo = GetOrderSystemRepository();
             
-            var customer = new Customer(id, firstName, lastName, mi);
+            var customer = new Customer(id, firstName, lastName, middleName);
             var saved = await repo.SaveCustomer(userInfo, customer);
             var reloadedCustomer= await repo.LoadCustomer(id);
             Assert.Equal(id, reloadedCustomer.Id);
             Assert.Equal(firstName, reloadedCustomer.FirstName);
             Assert.Equal(lastName, reloadedCustomer.LastName);
-            Assert.Equal(mi, reloadedCustomer.MiddleInitial);
-           
+            Assert.Equal(middleName, reloadedCustomer.MiddleName);
         }
         
         [Fact]
@@ -58,16 +57,15 @@ namespace Ezley.Testing
             var eventUserId = "test|abcd123xx456efg";
             var userInfo = new EventUserInfo(eventUserId);
             
-              
             var id = Guid.NewGuid();
             var firstName = $"First_{id}";
             var lastName = $"Last_{id}";
-            var mi = GetMiddleInitial().ToString();
+            var middleName = $"Middle_{id}";
 
             var repo = GetOrderSystemRepository();
             
             // things/events occur
-            var customer = new Customer(id, firstName, lastName, mi);
+            var customer = new Customer(id, firstName, lastName, middleName);
             string newFirstName = firstName + "_changed";
             customer.ChangeFirstName(newFirstName);
             
@@ -76,7 +74,7 @@ namespace Ezley.Testing
             Assert.Equal(id, reloadedCustomer.Id);
             Assert.Equal(newFirstName, reloadedCustomer.FirstName);
             Assert.Equal(lastName, reloadedCustomer.LastName);
-            Assert.Equal(mi, reloadedCustomer.MiddleInitial);
+            Assert.Equal(middleName, reloadedCustomer.MiddleName);
            
         }
         
@@ -91,12 +89,12 @@ namespace Ezley.Testing
             var id = Guid.NewGuid();
             var firstName = $"First_{id}";
             var lastName = $"Last_{id}";
-            var mi = GetMiddleInitial().ToString();
+            var middleName = $"Middle_{id}";
 
             var repo = GetOrderSystemRepository();
             
             // things/events occur
-            var customer = new Customer(id, firstName, lastName, mi);
+            var customer = new Customer(id, firstName, lastName, middleName);
             string newLastName = lastName + "_changed";
             customer.ChangeLastName(newLastName);
             
@@ -105,11 +103,11 @@ namespace Ezley.Testing
             Assert.Equal(id, reloadedCustomer.Id);
             Assert.Equal(firstName, reloadedCustomer.FirstName);
             Assert.Equal(newLastName, reloadedCustomer.LastName);
-            Assert.Equal(mi, reloadedCustomer.MiddleInitial);
+            Assert.Equal(middleName, reloadedCustomer.MiddleName);
         }
         
         [Fact]
-        public async Task RegisterCustomerAndChangeMiddleInitial()
+        public async Task RegisterCustomerAndChangeMiddleName()
         {
             _testOutputHelper.WriteLine($"Registering new customer");
             var eventUserId = "test|abcd123xx456efg";
@@ -119,21 +117,21 @@ namespace Ezley.Testing
             var id = Guid.NewGuid();
             var firstName = $"First_{id}";
             var lastName = $"Last_{id}";
-            var mi = GetMiddleInitial().ToString();
+            var middleName = $"Middle_{id}";
 
             var repo = GetOrderSystemRepository();
             
             // things/events occur
-            var customer = new Customer(id, firstName, lastName, mi);
-            string newMi = "2";
-            customer.ChangeMiddleInitial(newMi);
+            var customer = new Customer(id, firstName, lastName, middleName);
+            string newMiddleName = middleName + "_changed";
+            customer.ChangeMiddleName(newMiddleName);
             
             var saved = await repo.SaveCustomer(userInfo, customer);
             var reloadedCustomer= await repo.LoadCustomer(id);
             Assert.Equal(id, reloadedCustomer.Id);
             Assert.Equal(firstName, reloadedCustomer.FirstName);
             Assert.Equal(lastName, reloadedCustomer.LastName);
-            Assert.Equal(newMi, reloadedCustomer.MiddleInitial);
+            Assert.Equal(newMiddleName, reloadedCustomer.MiddleName);
         }
         private OrderSystemRepository GetOrderSystemRepository()
         {
@@ -165,22 +163,6 @@ namespace Ezley.Testing
                 _testConfig.CustomerViewsDatabase, _testConfig.CustomerViewsContainer);
         }
         
-        
-        
-      
-        private static readonly Random random = new Random();
-        private static string initials = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
-        public static char GetMiddleInitial()
-        {
-            int min = 0;
-            int max = 27;
-            lock(random) 
-            {
-                int pos = random.Next(min, max);
-                return initials[pos];
-            }
-        }
         
     }
 }
