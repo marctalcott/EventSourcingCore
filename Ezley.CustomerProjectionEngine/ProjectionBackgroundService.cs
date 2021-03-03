@@ -28,7 +28,6 @@ namespace Ezley.CustomerProjectionEngine
         private string _leasesContainer;
 
         private long _startDateTimeUtcEpochSeconds;
-        private DateTime _startDateTimeUtc;
         private string _processorName = "CustomerProjectionEngineProcess";
         
         public ProjectionBackgroundService(IConfiguration configuration,

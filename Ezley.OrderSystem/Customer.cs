@@ -13,7 +13,7 @@ namespace Ezley.OrderSystem
         public Guid Id { get; private set; }
         public string FirstName { get; private set;}
         public string LastName { get; private set; }
-        public string MiddleInitial { get; private set; }
+       // public string MiddleInitial { get; private set; }
         
         public string MiddleName { get; private set; }
         
@@ -26,7 +26,6 @@ namespace Ezley.OrderSystem
             if (middleName.Length > 45)
                 throw new ApplicationException("Middle Name can't be more than 45 char.");
             
-            // Apply(new CustomerRegistered(id, firstName, lastName, middleInitial));
             Apply(new CustomerRegistered(id, firstName, lastName, "", middleName));
         }
   
@@ -71,7 +70,7 @@ namespace Ezley.OrderSystem
             Id = @event.Id;
             FirstName = @event.FirstName;
             LastName = @event.LastName;
-            MiddleInitial = @event.MiddleInitial;
+            // MiddleInitial = @event.MiddleInitial;
             MiddleName = @event.MiddleName;
         }
 
@@ -85,10 +84,10 @@ namespace Ezley.OrderSystem
             LastName = @event.LastName;
         }
 
-        protected void MutateWhen(CustomerMiddleInitialChanged @event)
-        {
-            MiddleInitial = @event.MiddleInitial;
-        }
+        // protected void MutateWhen(CustomerMiddleInitialChanged @event)
+        // {
+        //     MiddleInitial = @event.MiddleInitial;
+        // }
         
         protected void MutateWhen(CustomerMiddleNameChanged @event)
         {

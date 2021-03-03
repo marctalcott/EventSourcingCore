@@ -28,13 +28,14 @@ namespace Ezley.Testing
             
             orderProjectionEngine.RegisterProjection(new OrderProjection());
             orderProjectionEngine.RegisterProjection(new PendingOrdersProjection());
-            
+            await orderProjectionEngine.StartAsync("UnitTests");
+            // ---
             var customerViewRepo = new CosmosDBViewRepository(
                 _testConfig.CustomerViewsEndpointUri, 
                 _testConfig.CustomerViewsAuthKey,
                 _testConfig.CustomerViewsDatabase,
                 _testConfig.CustomerViewsContainer);
-            var customerProcessorName = "OrderUnitTestsProcessor";
+            var customerProcessorName = "CustomerUnitTestsProcessor";
             var customerProjectionEngine = new CosmosDBProjectionEngine(eventTypeResolver, customerViewRepo,customerProcessorName,
                 _testConfig.EventsEndpointUri, _testConfig.EventsAuthKey, _testConfig.EventsDatabase,
                 _testConfig.LeasesEndpointUri, _testConfig.LeasesAuthKey, _testConfig.LeasesDatabase,
@@ -43,7 +44,7 @@ namespace Ezley.Testing
             customerProjectionEngine.RegisterProjection(new CustomerProjection());
             customerProjectionEngine.RegisterProjection(new AllCustomersProjection());
             
-            await orderProjectionEngine.StartAsync("UnitTests");
+            await customerProjectionEngine.StartAsync("UnitTests");
             await Task.Delay(-1);
         }
         

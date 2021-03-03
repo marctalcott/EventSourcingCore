@@ -123,7 +123,7 @@ namespace Ezley.Testing
             
             // things/events occur
             var customer = new Customer(id, firstName, lastName, middleName);
-            string newMiddleName = middleName + "_changed";
+            string newMiddleName = middleName + "_2";
             customer.ChangeMiddleName(newMiddleName);
             
             var saved = await repo.SaveCustomer(userInfo, customer);

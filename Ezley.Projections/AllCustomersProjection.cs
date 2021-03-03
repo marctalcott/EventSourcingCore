@@ -27,7 +27,7 @@ namespace Ezley.Projections
             RegisterHandler<CustomerRegistered>(WhenCustomerRegistered);
             RegisterHandler<CustomerFirstNameChanged>(WhenCustomerFirstNameChanged);
             RegisterHandler<CustomerLastNameChanged>(WhenCustomerLastNameChanged);
-            RegisterHandler<CustomerMiddleInitialChanged>(WhenCustomerMiddleInitialChanged);
+            RegisterHandler<CustomerMiddleNameChanged>(WhenCustomerMiddleNameChanged);
         }
         
         private void WhenCustomerRegistered(CustomerRegistered e, AllCustomersView view)
@@ -59,17 +59,6 @@ namespace Ezley.Projections
             existingCustomer.LastName = e.LastName;
         }
 
-        private void WhenCustomerMiddleInitialChanged(CustomerMiddleInitialChanged e, AllCustomersView view)
-        {
-            var existingCustomer = view.Customers.SingleOrDefault(x => x.Id == e.Id);
-            if (existingCustomer == null)
-            {
-                throw new ApplicationException("Customer does not exist...");
-            }
-
-            existingCustomer.MiddleInitial = e.MiddleInitial;
-        }
-        
         private void WhenCustomerMiddleNameChanged(CustomerMiddleNameChanged e, AllCustomersView view)
         {
             var existingCustomer = view.Customers.SingleOrDefault(x => x.Id == e.Id);
